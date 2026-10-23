@@ -116,9 +116,12 @@ async function onPaid(order) {
   const { sign } = require("../util");
   const token = sign({ dl: song.id }, 365 * 86400);
   const link = `${config.baseUrl}/#/musica/${song.id}?t=${token}`;
-  await wa.sendText(order.whatsapp, `✅ Pagamento confirmado! A música de *${song.nome}* é sua.\nBaixe as versões completas${hasClip ? " e o clipe" : ""} aqui: ${link}`);
+  // Entrega: por padrão só o link (texto é a mensagem mais barata e mantém a pessoa na página, onde estão os botões de
+  // baixar e compartilhar). WHATSAPP_DELIVERY=audio manda também o MP3; =off não manda nada.
+  const modo = config.whatsapp.delivery;
+  if (modo !== "off") await wa.sendText(order.whatsapp, `✅ Pagamento confirmado! A música de *${song.nome}* é sua.\nBaixe as versões completas${hasClip ? " e o clipe" : ""} e compartilhe aqui: ${link}`);
   const t0 = song.tracks[0];
-  if (t0?.file) await wa.sendAudio(order.whatsapp, `${config.baseUrl}/api/songs/${song.id}/download?track=0&t=${token}`, song.titulo);
+  if (modo === "audio" && t0?.file) await wa.sendAudio(order.whatsapp, `${config.baseUrl}/api/songs/${song.id}/download?track=0&t=${token}`, song.titulo);
 }
 
 /** Renderiza um clipe na fila. */

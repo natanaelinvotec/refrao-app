@@ -26,7 +26,11 @@ const config = {
     mock: MOCK || (!env("GEMINI_API_KEY") && !env("OPENAI_API_KEY"))
   },
   pix: { accessToken: env("MP_ACCESS_TOKEN"), webhookSecret: env("MP_WEBHOOK_SECRET"), expires: num("PIX_EXPIRES_SECONDS", 1800), mock: MOCK || !env("MP_ACCESS_TOKEN") },
-  whatsapp: { url: env("EVOLUTION_URL").replace(/\/$/, ""), instance: env("EVOLUTION_INSTANCE"), apiKey: env("EVOLUTION_API_KEY"), mock: MOCK || !env("EVOLUTION_URL") },
+  whatsapp: {
+    url: env("EVOLUTION_URL").replace(/\/$/, ""), instance: env("EVOLUTION_INSTANCE"), apiKey: env("EVOLUTION_API_KEY"), mock: MOCK || !env("EVOLUTION_URL"),
+    // o que vai no WhatsApp quando o PIX confirma: "link" (só texto com o link — padrão, mais barato), "audio" (texto + MP3), "off" (nada; a pessoa baixa/compartilha pela tela)
+    delivery: ["link", "audio", "off"].includes(env("WHATSAPP_DELIVERY", "link")) ? env("WHATSAPP_DELIVERY", "link") : "link"
+  },
   media: { ffmpeg: env("FFMPEG_PATH", "ffmpeg"), ffprobe: env("FFPROBE_PATH", "ffprobe"), font: env("FONT_PATH", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"), watermarkEvery: num("WATERMARK_EVERY", 8), previewSeconds: num("PREVIEW_SECONDS", 0) },
 
   prices: {

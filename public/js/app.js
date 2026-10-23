@@ -495,6 +495,28 @@
       h += '<a class="entrega" href="#/m/' + s.slug + '"><span class="ico-link"></span><strong>Página da música</strong><span class="muted small">capa + player pra compartilhar</span></a>';
       $("#entregas").innerHTML = h;
       var f3 = $("#inFotos3"); if (f3) f3.addEventListener("change", function () { var files = Array.prototype.slice.call(this.files, 0, 8); subirFotos(s.id, files, function () { API.clip(s.id, 0).then(renderMusica); }); });
+      // "Enviar o arquivo": baixa o MP3/MP4 no aparelho e abre a folha de compartilhar do sistema (WhatsApp, Instagram,
+      // Telegram...). Sai do próprio celular da pessoa — nada passa pelo WhatsApp do servidor, custo zero pra gente.
+      var podeArquivo = !!(navigator.share && navigator.canShare);
+      var sf = $("#shareFiles"); sf.innerHTML = ""; sf.hidden = !podeArquivo;
+      if (podeArquivo) {
+        var alvos = [];
+        s.tracks.forEach(function (t, i) { if (t) alvos.push({ rotulo: "enviar MP3 " + (s.tracks.length > 1 ? "v" + (i + 1) : ""), url: t.downloadUrl, nome: (s.slug || "musica") + (s.tracks.length > 1 ? "-v" + (i + 1) : "") + ".mp3", tipo: "audio/mpeg", dica: "WhatsApp, Telegram, e-mail" }); });
+        if (s.hasClip && s.clip && s.clip.status === "DONE" && s.clip.url) alvos.push({ rotulo: "postar o clipe", url: s.clip.url, nome: (s.slug || "clipe") + ".mp4", tipo: "video/mp4", dica: "Instagram, Status, TikTok" });
+        alvos.forEach(function (a) {
+          var b = document.createElement("button"); b.type = "button"; b.className = "btn btn-ink"; b.innerHTML = esc(a.rotulo) + " <small>" + a.dica + "</small>";
+          b.addEventListener("click", function () {
+            b.disabled = true; b.textContent = "preparando…";
+            fetch(a.url).then(function (r) { return r.blob(); }).then(function (blob) {
+              var file = new File([blob], a.nome, { type: a.tipo });
+              if (!navigator.canShare({ files: [file] })) throw new Error("sem suporte");
+              return navigator.share({ files: [file], title: s.titulo || s.nome, text: "Música feita pra " + s.nome + " 🎵" });
+            }).catch(function (e) { if (e && e.name !== "AbortError") { toast("seu navegador não compartilha arquivos; baixe e envie pelo app"); } })
+              .finally(function () { b.disabled = false; b.innerHTML = esc(a.rotulo) + " <small>" + a.dica + "</small>"; });
+          });
+          sf.appendChild(b);
+        });
+      }
       var link = location.origin + "/m/" + s.slug, txt = "Ouve a música que fiz pra " + s.nome + " 🎵 " + link;
       $("#shareWpp").href = "https://wa.me/?text=" + encodeURIComponent(txt);
       $("#shareCopy").onclick = function () { (navigator.clipboard ? navigator.clipboard.writeText(link) : Promise.reject()).then(function () { toast("link copiado"); }).catch(function () { prompt("copie o link:", link); }); };
