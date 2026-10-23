@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Refrão — seu nome cantado em 60 segundos</title>
+<meta name="description" content="Música personalizada com o nome no refrão e clipe automático com suas fotos. Pessoa, negócio, evento, campanha ou conteúdo. Pronta em minutos.">
+<meta name="theme-color" content="#F3EEE4">
+<script>document.documentElement.classList.add("js")</script>
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/img/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- fontes sem bloquear a primeira pintura: carregam depois e trocam com swap -->
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Anton&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="#/" class="logo" data-brand>Refrão</a>
+  <nav class="topnav">
+    <a href="#como">como funciona</a>
+    <a href="#precos">preços</a>
+    <a href="#/painel">minhas músicas</a>
+  </nav>
+  <a href="#/criar" class="btn btn-ink btn-sm">criar a minha</a>
+</header>
+
+<main id="app">
+
+<!-- ================= LANDING ================= -->
+<section class="view is-on" data-view="landing">
+<div class="page-main">
+
+  <!-- HERÓI: a capa do single com o nome do visitante é a própria página -->
+  <div class="hero">
+    <article class="sleeve" id="heroCover" aria-label="capa do single com o seu nome">
+      <div class="sleeve-art">
+        <p class="sleeve-tag">single · <span data-brand>Refrão</span></p>
+        <h1 class="sleeve-name" id="coverTitle">Seu nome</h1>
+        <p class="sleeve-sub" id="coverSub">forró · 2:48</p>
+        <button class="play-big" id="heroPlay" type="button" aria-label="tocar exemplo"><span class="ico-play"></span></button>
+        <div class="waves" id="heroWaves" aria-hidden="true"></div>
+      </div>
+      <div class="sleeve-back">
+        <p class="sleeve-claim" data-rise style="--i:0">Escreva um nome. Ouça ele cantado no refrão.</p>
+        <form class="sleeve-form" id="heroForm" autocomplete="off" data-rise style="--i:1">
+          <label for="heroNome" class="sr-only">nome</label>
+          <input id="heroNome" type="text" maxlength="30" placeholder="Dona Cida, Açaí do Pedro…" required>
+          <button type="submit" class="btn btn-ink">ouvir no refrão</button>
+        </form>
+        <div class="sleeve-ritmos" id="heroRitmos" data-rise style="--i:2"></div>
+        <dl class="sleeve-tracks" data-rise style="--i:3">
+          <div><dt>faixa 1</dt><dd>versão 1 · música inteira, com o nome no refrão</dd></div>
+          <div><dt>faixa 2</dt><dd>versão 2 · outra interpretação, você escolhe</dd></div>
+          <div><dt>extra</dt><dd>clipe 9:16 com as suas fotos, pronto na hora</dd></div>
+          <div><dt>prazo</dt><dd>2 minutos. grátis pra ouvir, <strong id="statMusicas">—</strong> já feitas</dd></div>
+        </dl>
+      </div>
+    </article>
+  </div>
+
+  <!-- COMO FUNCIONA: o recibo -->
+  <section class="chapter chapter-slip" id="como">
+    <div class="chapter-text" data-reveal>
+      <h2 data-part style="--i:0">Do recado ao play</h2>
+      <p data-part style="--i:1">Você conta a história, lê a letra antes de gravar e ouve duas versões inteiras. Só paga se gostar. O clipe com as suas fotos sai junto com a música.</p>
+    </div>
+    <div class="slip" data-reveal data-ui>
+      <h3>agora</h3>
+      <div class="slip-row"><span>pra quem é e o que precisa dizer</span><i></i><span>1 min</span></div>
+      <div class="slip-row"><span>escolhe o ritmo e a voz</span><i></i><span>30 s</span></div>
+      <div class="slip-row"><span>lê e aprova a letra</span><i></i><span>1 min</span></div>
+      <h3>em seguida</h3>
+      <div class="slip-row"><span>o estúdio grava duas versões</span><i></i><span>2 min</span></div>
+      <div class="slip-row"><span>você sobe as fotos do clipe</span><i></i><span>enquanto espera</span></div>
+      <h3>depois do PIX</h3>
+      <div class="slip-row"><span>MP3 sem marca d'água, 2 versões</span><i></i><span>na hora</span></div>
+      <div class="slip-row"><span>clipe com legenda da letra</span><i></i><span>na hora</span></div>
+      <div class="slip-row"><span>link com capa pra mandar no WhatsApp</span><i></i><span>na hora</span></div>
+      <div class="slip-total"><span>você sai com 2 músicas e 1 clipe</span><span>5 min</span></div>
+    </div>
+  </section>
+
+  <!-- VITRINE: o disco -->
+  <section class="chapter chapter-disc" id="versoes">
+    <div class="disc-plate" data-reveal>
+      <div class="disc" data-ui aria-label="prévia com duas versões">
+        <div class="disc-ring"></div><div class="disc-dot"></div>
+        <div class="disc-label"><span class="disc-label-name">Dona Cida</span><span class="disc-label-sub">forró · versão 1 · 2:48</span></div>
+      </div>
+    </div>
+    <div class="disc-text" data-reveal>
+      <div class="disc-tabs" id="discTabs" role="tablist">
+        <button type="button" role="tab" class="is-on" data-tab="pessoa">pra uma pessoa</button>
+        <button type="button" role="tab" data-tab="empresa">pro meu negócio</button>
+        <button type="button" role="tab" data-tab="candidato">pra campanha</button>
+      </div>
+      <div>
+        <h2 id="discTitle">Duas versões, você escolhe</h2>
+        <p id="discDesc">A mesma letra gravada de dois jeitos. Ouve as duas inteiras, com marca d'água, e leva a que mais gostar. Não gostou de nenhuma? Refazemos uma vez sem custo.</p>
+      </div>
+      <div class="disc-actions">
+        <a href="#/criar" class="cell cell-ink">criar a minha</a>
+        <a href="#mural" class="cell cell-tone">ouvir exemplos</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- MURAL: tiles com etiqueta -->
+  <section class="chapter chapter-mural" id="mural">
+    <h2 data-reveal>Tocando no mural</h2>
+    <div class="mural" id="muralLanding"></div>
+  </section>
+
+  <!-- PREÇO: o ingresso -->
+  <section class="chapter chapter-ticket" id="precos">
+    <h2 data-reveal>Preço de single, não de estúdio</h2>
+    <div class="tickets" id="planosLanding"></div>
+    <p class="ticket-note">PIX com liberação na hora. A música é sua, com licença de uso comercial e eleitoral.</p>
+    <div class="siga" id="sigaLanding" data-reveal>
+      <div class="siga-main">
+        <h3>Siga a gente e ganhe mais <span id="sigaPct">10%</span></h3>
+        <p>Siga <a id="sigaLink" href="#" target="_blank" rel="noopener">@refrao.app</a> no Instagram, mande <strong>“CUPOM”</strong> no direct e o código chega na hora. É só colar no checkout — vale na Música e na Música + clipe.</p>
+      </div>
+      <a class="btn btn-ink" id="sigaBtn" href="#" target="_blank" rel="noopener">seguir no Instagram</a>
+    </div>
+  </section>
+
+  <!-- PERGUNTAS: fichas com aba -->
+  <section class="chapter chapter-faq" id="faq">
+    <h2 data-reveal>Perguntas que chegam</h2>
+    <div class="cards" id="faqCards" data-reveal>
+      <details class="card-tab c1" data-part style="--i:0" open><summary><span class="tab">feita por IA?</span><span class="q">É feita por inteligência artificial?</span></summary><p>Sim. A letra, a voz e os instrumentos são gerados por IA a partir do que você contou. Você aprova a letra antes de gravar, por isso o nome e os detalhes saem certos.</p></details>
+      <details class="card-tab c2" data-part style="--i:1"><summary><span class="tab">posso usar?</span><span class="q">Posso usar em propaganda, carro de som ou campanha?</span></summary><p>Pode. A música é sua, sem marca d'água, com licença de uso comercial e eleitoral incluída no recibo.</p></details>
+      <details class="card-tab c3" data-part style="--i:2"><summary><span class="tab">e se não gostar?</span><span class="q">E se eu não gostar de nenhuma versão?</span></summary><p>Você ouve as duas versões completas antes de pagar. Depois de pagar, se quiser mexer na letra, refazemos uma vez sem custo.</p></details>
+      <details class="card-tab c1" data-part style="--i:3"><summary><span class="tab">demora?</span><span class="q">Quanto tempo demora?</span></summary><p>A letra sai em segundos; a música completa leva de 1 a 3 minutos. O clipe fica pronto junto com a música.</p></details>
+      <details class="card-tab c2" data-part style="--i:4"><summary><span class="tab">o clipe</span><span class="q">Como funciona o clipe com fotos?</span></summary><p>Você sobe até 8 fotos enquanto a música grava. O clipe sai em 9:16 com a letra legendada, pronto pra Reels, Status e TikTok. Vem no plano Música + clipe.</p></details>
+    </div>
+  </section>
+
+  <!-- FECHO: o primeiro passo já aberto -->
+  <section class="chapter chapter-cta" id="comecar">
+    <div class="cta-line" data-reveal>
+      <h2 data-part style="--i:0">Seu nome no refrão.</h2>
+      <p data-part style="--i:1">Escolhe pra quem é e em 2 minutos a prévia toca aqui mesmo.</p>
+    </div>
+    <div class="cta-dialog" data-ui>
+      <p class="cta-dialog-title">Pra quem é a música?</p>
+      <div class="nichos" id="nichosLanding" data-reveal></div>
+    </div>
+  </section>
+</div>
+
+<!-- RODAPÉ: o nome primeiro (revelado como cortina) -->
+<footer class="footer">
+  <p class="footer-name" data-brand>Refrão</p>
+  <div class="footer-row">
+    <div class="footer-contact"><a id="supportLink" href="#">WhatsApp</a><a href="#/painel">minhas músicas</a><a href="#/criar">criar música</a></div>
+    <div class="footer-links"><a href="#como">como funciona</a><a href="#precos">preços</a><a href="#faq">perguntas</a><a href="#mural">mural</a></div>
+  </div>
+  <div class="footer-legal"><span>música e clipe personalizados · feito no Brasil</span><a href="#/">voltar ao topo</a></div>
+</footer>
+</section>
+
+<!-- ================= CRIAR ================= -->
+<section class="view view-app" data-view="criar">
+  <div class="app-col">
+    <div class="progress" id="progress"><span></span></div>
+
+    <div class="step" data-step="1">
+      <h1 class="h1">Pra quem é a música?</h1>
+      <p class="muted">Com o nome no refrão. Pronta em minutos.</p>
+      <div class="tiles" id="tilesNicho"></div>
+    </div>
+
+    <div class="step" data-step="2">
+      <h1 class="h1" id="quemTitulo">Quem vai ganhar a música?</h1>
+      <p class="muted" id="quemSub">O nome entra na letra e no refrão.</p>
+      <label class="field"><span>nome ou apelido</span><input id="inNome" type="text" maxlength="30" placeholder="ex: Dona Cida"></label>
+      <label class="field" id="fieldNumero" hidden><span>número na urna</span><input id="inNumero" inputmode="numeric" maxlength="5" placeholder="13"></label>
+      <p class="label" id="perfilTitulo">Essa pessoa é...</p>
+      <div class="chips" id="chipsPerfil"></div>
+      <div class="sticky-cta"><button class="btn btn-palco btn-block" id="btnStep2" disabled>continuar</button></div>
+    </div>
+
+    <div class="step" data-step="3">
+      <h1 class="h1" id="recadoTitulo">O que a música precisa dizer?</h1>
+      <p class="muted">Quanto mais detalhe, mais a música fica sua. Pode escrever ou falar.</p>
+      <div class="recado-box">
+        <textarea id="inRecado" rows="4" maxlength="500" placeholder="ex: é aniversário de 60 anos da minha mãe. ela ama dançar forró e sempre diz 'tudo passa, meu filho'."></textarea>
+        <div class="recado-foot"><button type="button" class="mic" id="btnMic" aria-label="falar o recado"><span class="ico-mic"></span> falar</button><span id="recadoCount">0/500</span></div>
+      </div>
+      <div class="chips chips-starter" id="chipsStarter"></div>
+      <p class="label">Qual ritmo?</p>
+      <p class="muted small">Toque no play pra ouvir um trecho.</p>
+      <div class="ritmos" id="listaRitmos"></div>
+      <p class="label">Qual voz?</p>
+      <div class="chips" id="chipsVoz"></div>
+      <div class="sticky-cta"><button class="btn btn-palco btn-block" id="btnStep3" disabled>escrever a letra</button></div>
+    </div>
+
+    <div class="step" data-step="4">
+      <h1 class="h1">Leia a letra antes de gravar</h1>
+      <p class="muted">Mude qualquer verso. O refrão repete o nome de propósito.</p>
+      <div class="letra-card">
+        <div class="letra-head"><span id="letraRitmo">—</span><button type="button" class="link" id="btnOutraLetra">escrever outra</button></div>
+        <textarea id="inLetra" rows="16" spellcheck="false" placeholder="escrevendo a letra..."></textarea>
+      </div>
+      <p class="erro" id="erroStep4" hidden></p>
+      <div class="sticky-cta"><button class="btn btn-palco btn-block" id="btnStep4">gravar a música</button><p class="tiny">a gravação leva de 1 a 3 minutos · a letra não gasta crédito</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GERANDO ================= -->
+<section class="view view-app" data-view="gerando">
+  <div class="app-col">
+    <div class="gerando">
+      <div class="disc-mini"><span></span></div>
+      <h1 class="h1" id="gerandoTitulo">Colocando o nome no refrão</h1>
+      <p class="muted" id="gerandoSub">o nome tem que sair cantando no primeiro play.</p>
+      <div class="bar"><i id="gerandoBar"></i></div>
+      <p class="tiny" id="gerandoPct">6%</p>
+      <p class="erro" id="gerandoErro" hidden></p>
+      <button class="btn btn-noite" id="btnGerandoVoltar" hidden>tentar de novo</button>
+    </div>
+    <div class="enquanto">
+      <h3>Enquanto isso, monte o clipe</h3>
+      <p class="muted small">Sobe até 8 fotos. O clipe sai junto com a música, sem custo pra ver a prévia.</p>
+      <div class="fotos-grid" id="fotosGrid"></div>
+      <input type="file" id="inFotos" accept="image/jpeg,image/png,image/webp" multiple hidden>
+      <button type="button" class="btn btn-ghost btn-block" id="btnAddFoto">+ adicionar fotos</button>
+    </div>
+    <p class="tiny center">não feche esta tela · se sair, a prévia chega no seu WhatsApp</p>
+  </div>
+</section>
+
+<!-- ================= PRÉVIA ================= -->
+<section class="view view-app" data-view="previa">
+  <div class="app-col">
+    <div class="preview-cover"><div class="cover-art small" id="previewCover"><span class="cover-tag">single</span><h2 class="cover-title" id="previewTitulo">—</h2><p class="cover-sub" id="previewSub">—</p></div></div>
+    <div class="versoes" id="versoes"></div>
+    <div class="player">
+      <button type="button" class="play" id="previewPlay" aria-label="tocar prévia"><span class="ico-play"></span></button>
+      <div class="player-body">
+        <div class="waves wide" id="previewWaves" aria-hidden="true"></div>
+        <input type="range" class="seek" id="previewSeek" min="0" max="100" value="0" aria-label="posição">
+        <div class="times"><span id="tCur">0:00</span><span id="tDur">0:00</span></div>
+      </div>
+    </div>
+    <p class="tiny center">música completa com marca d'água · o MP3 limpo é liberado no PIX</p>
+    <details class="letra-toggle"><summary>ver letra</summary><pre id="previewLetra"></pre></details>
+    <div class="clipe-mini" id="clipeMini" hidden>
+      <div class="phone-frame xs"><div class="clipe-stage"><div class="foto f1"></div><div class="foto f2"></div><p class="legenda" id="clipeLegenda"></p></div></div>
+      <div><h3>Seu clipe será montado com <span id="clipeFotos">0</span> fotos</h3><p class="muted small">Sai na hora, junto com a música, no plano Música + clipe.</p></div>
+    </div>
+    <div class="box" id="previaAddFotos"><h3>Quer o clipe com suas fotos?</h3><p class="muted small">Sobe até 8 fotos agora; o clipe fica pronto assim que o pagamento cair.</p><input type="file" id="inFotos2" accept="image/jpeg,image/png,image/webp" multiple hidden><button type="button" class="btn btn-ghost" id="btnAddFoto2">+ adicionar fotos</button></div>
+    <div class="sticky-cta">
+      <button class="btn btn-palco btn-block" id="btnCheckout">quero a música completa</button>
+      <button class="btn btn-ghost btn-block" id="btnGuardar">guardar no meu WhatsApp e decidir depois</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CHECKOUT ================= -->
+<section class="view view-app" data-view="checkout">
+  <div class="app-col">
+    <h1 class="h1">Liberar a música completa</h1>
+    <div class="resumo-pedido"><div class="cover-thumb" id="checkoutThumb"></div><div><strong id="checkoutTitulo">—</strong><span class="muted small">2 versões · MP3 sem marca d'água · letra · página pública</span></div></div>
+    <div class="plano-pick" id="planoPick"></div>
+    <p class="label">Leve junto</p>
+    <div class="bumps" id="bumps"></div>
+    <label class="field"><span>seu WhatsApp (a música chega aqui)</span><input id="inWpp" inputmode="tel" autocomplete="tel" placeholder="(85) 99999-9999"></label>
+    <label class="field"><span>e-mail (opcional, pro recibo)</span><input id="inEmail" type="email" autocomplete="email" placeholder="voce@email.com"></label>
+    <div class="cupom-box" id="cupomBox">
+      <label class="field"><span>cupom (opcional)</span><div class="cupom-row"><input id="inCupom" placeholder="SIGA-XXXX" autocapitalize="characters" autocomplete="off"><button type="button" class="btn btn-ink" id="btnCupom">aplicar</button></div></label>
+      <p class="tiny" id="cupomDica">Ganhe <span class="cupomPct">10%</span>: siga <a id="cupomIg" href="#" target="_blank" rel="noopener">@refrao.app</a> no Instagram e mande “CUPOM” no direct. O código chega na hora.</p>
+      <p class="tiny cupom-ok" id="cupomOk" hidden></p>
+    </div>
+    <div class="total"><div><span>total no PIX</span><small class="desconto" id="descontoPix" hidden></small></div><strong id="totalPix">—</strong></div>
+    <p class="erro" id="erroCheckout" hidden></p>
+    <div class="sticky-cta"><button class="btn btn-pix btn-block" id="btnPix">gerar PIX</button><p class="tiny">liberação automática em segundos após o pagamento</p></div>
+  </div>
+  <div class="pix-modal" id="pixModal" hidden>
+    <div class="pix-card">
+      <h2>Pague com PIX</h2>
+      <div class="qr" id="pixQr"></div>
+      <code class="copia" id="pixCode"></code>
+      <button type="button" class="btn btn-ghost btn-block" id="btnCopiar">copiar código PIX</button>
+      <p class="tiny">aguardando pagamento… <span id="pixTimer">—</span></p>
+      <button type="button" class="btn btn-pix btn-block" id="btnSimularPago" hidden>simular pagamento (modo teste)</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MÚSICA (entrega) ================= -->
+<section class="view view-app" data-view="musica">
+  <div class="app-col">
+    <p class="pago">pagamento confirmado</p>
+    <h1 class="h1">A música é sua</h1>
+    <p class="muted" id="musicaSub">As versões estão liberadas, sem marca d'água. Também mandamos no seu WhatsApp.</p>
+    <div class="entregas" id="entregas"></div>
+    <div class="share-box">
+      <p class="label">Manda pra quem é</p>
+      <div class="share-row"><a class="btn btn-wpp" id="shareWpp" target="_blank" rel="noopener">WhatsApp</a><button type="button" class="btn btn-ghost" id="shareCopy">copiar link</button><button type="button" class="btn btn-ghost" id="shareNative">compartilhar</button></div>
+    </div>
+    <div class="box"><h3>Publicar no mural?</h3><p class="muted small">Sua música aparece na página inicial com o nome e a letra. Você pode pedir pra tirar quando quiser.</p><button type="button" class="btn btn-ghost" id="btnPublicar">publicar no mural</button></div>
+    <div class="upsell-studio"><h3>Precisa de música toda semana?</h3><p class="muted small">O plano Studio dá 4 músicas por mês, clipes ilimitados e vinhetas. Ideal pra lojas, igrejas e criadores.</p><a href="#/criar" class="btn btn-brasa" id="btnStudio">ver plano Studio</a></div>
+    <details class="letra-toggle"><summary>ver letra</summary><pre id="musicaLetra"></pre></details>
+  </div>
+</section>
+
+<!-- ================= PÁGINA PÚBLICA ================= -->
+<section class="view" data-view="publica">
+  <div class="public-col">
+    <div class="cover-art" id="pubCover"><span class="cover-tag">single</span><h1 class="cover-title" id="pubTitulo">—</h1><p class="cover-sub" id="pubSub">—</p><button class="play-big" id="pubPlay" type="button" aria-label="tocar"><span class="ico-play"></span></button><div class="waves" id="pubWaves" aria-hidden="true"></div></div>
+    <p class="pub-meta" id="pubMeta"></p>
+    <details class="letra-toggle"><summary>ver letra</summary><pre id="pubLetra"></pre></details>
+    <div class="pub-cta"><a href="#/criar" class="btn btn-palco btn-block">fazer a minha com o meu nome</a><p class="tiny">grátis pra ouvir a prévia · feito com <span data-brand>Refrão</span></p></div>
+  </div>
+</section>
+
+<!-- ================= PAINEL DO CLIENTE ================= -->
+<section class="view view-dash" data-view="painel">
+  <aside class="dash-side">
+    <p class="dash-user"><strong id="painelNome">Minhas músicas</strong><span class="muted small" id="painelWpp"></span></p>
+    <nav class="dash-nav"><a class="is-on" href="#/painel">minhas músicas</a><a href="#/criar">nova música</a><button type="button" id="btnSair">sair</button></nav>
+  </aside>
+  <div class="dash-main">
+    <div class="login-box" id="painelLogin">
+      <h2 class="h2">Entrar com WhatsApp</h2>
+      <p class="muted">Mandamos um código de 6 dígitos no seu número.</p>
+      <label class="field"><span>WhatsApp com DDD</span><input id="loginWpp" inputmode="tel" placeholder="(85) 99999-9999"></label>
+      <button class="btn btn-palco btn-block" id="btnOtp" style="margin-top:14px">receber código</button>
+      <div id="otpStep" hidden>
+        <label class="field"><span>código recebido</span><input id="loginCode" inputmode="numeric" maxlength="6" placeholder="000000"></label>
+        <button class="btn btn-noite btn-block" id="btnVerify" style="margin-top:14px">entrar</button>
+      </div>
+      <p class="erro" id="loginErro" hidden></p>
+    </div>
+    <div id="painelConteudo" hidden>
+      <div class="dash-head"><h1 class="h1">Minhas músicas</h1><div class="studio-pill" id="painelPlano"></div></div>
+      <div class="lista-musicas" id="listaMusicas"></div>
+      <div class="dash-cards">
+        <div class="card"><h3>Indique e ganhe</h3><p class="big" id="painelIndic">0</p><p class="muted small">a cada 3 indicações que compram, uma música grátis. Seu link: <code id="painelRef"></code></p></div>
+        <div class="card"><h3>Créditos</h3><p class="big" id="painelCred">0</p><p class="muted small">músicas que você pode gerar sem pagar (Studio e indicações).</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ADMIN ================= -->
+<section class="view view-dash" data-view="admin">
+  <aside class="dash-side">
+    <p class="dash-user"><strong>Admin</strong><span class="muted small">operação</span></p>
+    <nav class="dash-nav" id="adminNav"><button type="button" data-tab="geral" class="is-on">visão geral</button><button type="button" data-tab="musicas">músicas</button><button type="button" data-tab="pedidos">pedidos</button><button type="button" data-tab="mural">mural</button><button type="button" data-tab="cupons">cupons</button></nav>
+  </aside>
+  <div class="dash-main">
+    <div class="login-box" id="adminLogin">
+      <h2 class="h2">Acesso da operação</h2>
+      <label class="field"><span>senha</span><input id="adminPass" type="password" autocomplete="current-password"></label>
+      <button class="btn btn-noite btn-block" id="btnAdminLogin" style="margin-top:14px">entrar</button>
+      <p class="erro" id="adminErro" hidden></p>
+    </div>
+    <div id="adminConteudo" hidden>
+      <div class="dash-head"><h1 class="h1" id="adminTitulo">Hoje</h1><div class="range" id="adminRange"><button data-r="1d" class="is-on">hoje</button><button data-r="7d">7 dias</button><button data-r="30d">30 dias</button></div></div>
+      <div id="tabGeral">
+        <div class="kpis" id="kpis"></div>
+        <div class="admin-grid">
+          <div class="card"><h3>Funil</h3><div class="funil" id="funil"></div></div>
+          <div class="card"><h3>Custo de IA por venda</h3><p class="big" id="custoIa">—</p><p class="muted small" id="custoIaSub"></p><h3 style="margin-top:14px">Provedores</h3><ul class="prov" id="provedores"></ul></div>
+          <div class="card wide"><h3>Últimas músicas</h3><table class="tabela" id="fila"></table></div>
+        </div>
+      </div>
+      <div id="tabMusicas" hidden><input class="field" id="adminBusca" placeholder="buscar por nome, WhatsApp ou id" style="margin:0 0 12px;padding:12px 14px;border-radius:12px;border:1.5px solid var(--linha);width:100%"><table class="tabela" id="adminMusicas"></table></div>
+      <div id="tabPedidos" hidden><table class="tabela" id="adminPedidos"></table></div>
+      <div id="tabMural" hidden><table class="tabela" id="adminMural"></table></div>
+      <div id="tabCupons" hidden>
+        <div class="cupom-novo">
+          <p class="label">Liberar cupom na mão (quem mandou print seguindo a página)</p>
+          <div class="cupom-novo-row">
+            <input id="cupomHandle" placeholder="@ do Instagram (opcional)">
+            <input id="cupomWpp" inputmode="tel" placeholder="WhatsApp com DDD (opcional)">
+            <input id="cupomPct" inputmode="numeric" placeholder="%" value="10" style="max-width:70px">
+            <label class="check"><input type="checkbox" id="cupomEnviar" checked> mandar no WhatsApp</label>
+            <button class="btn btn-pix" id="btnCupomNovo">gerar cupom</button>
+          </div>
+          <p class="tiny">Pelo Instagram o cupom sai sozinho: a pessoa segue, manda "CUPOM" no direct e o bot confere e responde. Esta tela é só pra liberar manualmente.</p>
+        </div>
+        <table class="tabela" id="adminCupons"></table>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="/js/data.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/app.js"></script>
+<script src="/js/motion.js"></script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+{ "name": "Refrão", "short_name": "Refrão", "start_url": "/", "display": "standalone", "background_color": "#FFF7EA", "theme_color": "#FFF7EA", "icons": [{ "src": "/img/icon.svg", "sizes": "any", "type": "image/svg+xml" }] }

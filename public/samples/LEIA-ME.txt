@@ -1,0 +1,1 @@
+Coloque aqui um MP3 de 10–15 s por ritmo (forro.mp3, sertanejo.mp3, ...). Sem o arquivo, o site usa um sintetizador. Gere com: npm run samples

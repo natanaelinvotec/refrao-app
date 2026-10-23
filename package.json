@@ -1,0 +1,14 @@
+{
+  "name": "refrao",
+  "version": "1.0.0",
+  "description": "Música personalizada com o nome no refrão + clipe automático com fotos. Sem dependências: Node 22+ e ffmpeg.",
+  "private": true,
+  "type": "commonjs",
+  "engines": { "node": ">=22.5" },
+  "scripts": {
+    "start": "node --no-warnings server/index.js",
+    "dev": "MOCK_PROVIDERS=1 node --no-warnings --watch server/index.js",
+    "samples": "node --no-warnings scripts/gen-samples.js"
+  },
+  "dependencies": {}
+}
