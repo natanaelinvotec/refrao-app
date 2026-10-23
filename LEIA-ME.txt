@@ -1,0 +1,31 @@
+REFRÃO — atualização de 23/10/2026 (commits 053169b e c12c06b)
+Só os arquivos alterados desde a versão que está no GitHub (upload de 70ccc85).
+
+O que muda: promoção de/por nos planos, cupom "siga e ganhe" (webhook do Instagram,
+bot do WhatsApp, aba cupons no admin), entrega "só link" por padrão e botões de
+compartilhar o MP3/MP4 direto do celular.
+
+Como aplicar no GitHub (Add file → Upload files):
+  arraste as pastas public/ e server/ e os arquivos README.md e .env.example
+  por cima — o GitHub substitui os que já existem e cria os novos:
+    public/css/style.css        public/index.html
+    public/js/api.js            public/js/app.js
+    server/config.js            server/db.js            server/index.js
+    server/util.js              server/routes/api.js    server/routes/admin.js
+    server/services/songs.js    server/services/cupons.js (novo)
+    server/services/instagram.js (novo)
+    README.md
+
+  Arquivos com ponto (o arrastar-e-soltar do GitHub ignora): crie pelo
+  "Add file → Create new file", colando o conteúdo:
+    .env.example   (atualizado: novas variáveis PRICE_*_DE, CUPOM_*, IG_*, WHATSAPP_DELIVERY, EVOLUTION_WEBHOOK_SECRET)
+    .gitignore     (ainda não está no repositório — importante: evita subir data/ e .env)
+
+No servidor: ao atualizar, o banco ganha as tabelas coupons/inbox_seen e as colunas
+cupom/desconto em orders sozinho na primeira subida (migração automática).
+Novas variáveis no .env (todas opcionais; sem elas o sistema roda com os padrões):
+  PRICE_MUSICA=990  PRICE_MUSICA_DE=1490  PRICE_CLIPE=1490  PRICE_CLIPE_DE=2490
+  CUPOM_SEGUIDOR_PCT=10  CUPOM_SEGUIDOR_DIAS=30
+  WHATSAPP_DELIVERY=link
+  IG_HANDLE / IG_ACCOUNT_ID / IG_ACCESS_TOKEN / IG_VERIFY_TOKEN / IG_APP_SECRET
+  EVOLUTION_WEBHOOK_SECRET
