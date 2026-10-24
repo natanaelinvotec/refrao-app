@@ -46,8 +46,10 @@ window.API = (function () {
       unlock: (id) => post(`/api/admin/songs/${id}/unlock`, {}),
       retry: (id) => post(`/api/admin/songs/${id}/retry`, {}),
       cupons: () => get("/api/admin/cupons"),
-      cupomNovo: (b) => post("/api/admin/cupons", b)
+      cupomNovo: (b) => post("/api/admin/cupons", b),
+      leads: () => get("/api/admin/leads")
     },
-    cupom: (code, plan) => post("/api/cupom", { code, plan })
+    cupom: (code, plan) => post("/api/cupom", { code, plan }),
+    email: (songId, email) => post(`/api/songs/${songId}/email`, { email })
   };
 })();

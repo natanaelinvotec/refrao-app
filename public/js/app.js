@@ -402,7 +402,7 @@
       ck.plan = n ? "clipe" : "musica";
       $("#checkoutTitulo").textContent = (s.titulo || s.nome) + " · " + (s.ritmoNome || "").toLowerCase();
       $("#checkoutThumb").style.background = ui(s.ritmo).cor;
-      try { var w = localStorage.getItem("refrao:wpp"); if (w) $("#inWpp").value = w; } catch (e) {}
+      try { var w = localStorage.getItem("refrao:wpp"); if (w) $("#inWpp").value = w; var em0 = localStorage.getItem("refrao:email"); if (em0) $("#inEmail").value = em0; } catch (e) {}
       renderCheckout();
     }).catch(function (e) { toast(e.message); go("#/"); });
   };
@@ -445,6 +445,9 @@
   $("#inWpp").addEventListener("input", function () { this.value = maskWpp(this.value); });
   $("#btnPix").addEventListener("click", function () {
     var w = $("#inWpp").value; if (!wppOk(w)) { toast("coloque seu WhatsApp com DDD"); $("#inWpp").focus(); return; }
+    var em = $("#inEmail").value.trim();
+    if (!em || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em)) { toast("coloque seu e-mail: a música vai pra sua caixa de entrada"); $("#inEmail").focus(); return; }
+    try { localStorage.setItem("refrao:email", em); } catch (e) {}
     try { localStorage.setItem("refrao:wpp", w); } catch (e) {}
     var b = this; b.disabled = true; b.textContent = "gerando PIX...";
     API.checkout({ songId: ck.id, plan: ck.plan, bumps: ck.bumps, whatsapp: w, email: $("#inEmail").value.trim(), cupom: ck.cupom ? ck.cupom.code : "" })
@@ -517,6 +520,29 @@
           sf.appendChild(b);
         });
       }
+      // e-mail: mostra o que já foi, permite cadastrar/reenviar
+      var emSalvo = ""; try { emSalvo = localStorage.getItem("refrao:email") || ""; } catch (e) {}
+      $("#inEmail2").value = emSalvo; $("#emailInfo").textContent = emSalvo ? "Os MP3 e os links foram para " + emSalvo + ". Quer em outro e-mail? Digite abaixo." : "Digite seu e-mail e a gente manda os MP3 e os links.";
+      $("#btnEmail").onclick = function () {
+        var em = $("#inEmail2").value.trim(); if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em)) { toast("esse e-mail não parece certo"); return; }
+        var b = this; b.disabled = true; b.textContent = "enviando…";
+        API.email(s.id, em).then(function (r) { toast(r.mock ? "e-mail simulado (modo teste)" : "e-mail enviado!"); try { localStorage.setItem("refrao:email", em); } catch (e) {} $("#emailInfo").textContent = "Enviado para " + em + "."; })
+          .catch(function (e) { toast(e.message); }).finally(function () { b.disabled = false; b.textContent = "enviar por e-mail"; });
+      };
+      // redes: Instagram/TikTok precisam do arquivo (Reels/Status); com Web Share vai direto, sem ela abre o app e explica
+      var sr = $("#shareRedes"); sr.innerHTML = "";
+      [["Instagram", "https://www.instagram.com/", "ig"], ["TikTok", "https://www.tiktok.com/upload", "tt"], ["Status do WhatsApp", "https://wa.me/", "st"]].forEach(function (r) {
+        var b = document.createElement("button"); b.type = "button"; b.className = "btn btn-ghost rede-" + r[2]; b.textContent = r[0];
+        b.addEventListener("click", function () {
+          var alvo = (s.hasClip && s.clip && s.clip.status === "DONE" && s.clip.url) ? { url: s.clip.url, nome: (s.slug || "clipe") + ".mp4", tipo: "video/mp4" } : (s.tracks[0] ? { url: s.tracks[0].downloadUrl, nome: (s.slug || "musica") + ".mp3", tipo: "audio/mpeg" } : null);
+          if (navigator.share && navigator.canShare && alvo) {
+            b.disabled = true;
+            fetch(alvo.url).then(function (x) { return x.blob(); }).then(function (blob) { var f = new File([blob], alvo.nome, { type: alvo.tipo }); if (!navigator.canShare({ files: [f] })) throw new Error("x"); return navigator.share({ files: [f], title: s.titulo || s.nome }); })
+              .catch(function (e) { if (!e || e.name !== "AbortError") { toast("baixe o arquivo e poste pelo app do " + r[0]); window.open(r[1], "_blank"); } }).finally(function () { b.disabled = false; });
+          } else { toast("no celular, baixe o " + (alvo && alvo.tipo === "video/mp4" ? "clipe" : "MP3") + " e poste pelo app do " + r[0]); window.open(r[1], "_blank"); }
+        });
+        sr.appendChild(b);
+      });
       var link = location.origin + "/m/" + s.slug, txt = "Ouve a música que fiz pra " + s.nome + " 🎵 " + link;
       $("#shareWpp").href = "https://wa.me/?text=" + encodeURIComponent(txt);
       $("#shareCopy").onclick = function () { (navigator.clipboard ? navigator.clipboard.writeText(link) : Promise.reject()).then(function () { toast("link copiado"); }).catch(function () { prompt("copie o link:", link); }); };
@@ -600,10 +626,17 @@
   $$("#adminRange button").forEach(function (b) { b.addEventListener("click", function () { adm.range = b.dataset.r; $$("#adminRange button").forEach(function (x) { x.classList.toggle("is-on", x === b); }); carregarAdmin(); }); });
   function adminTab(tab) {
     $$("#adminNav button").forEach(function (b) { b.classList.toggle("is-on", b.dataset.tab === tab); });
-    ["geral", "musicas", "pedidos", "mural", "cupons"].forEach(function (t) { $("#tab" + t[0].toUpperCase() + t.slice(1)).hidden = t !== tab; });
+    ["geral", "musicas", "pedidos", "mural", "cupons", "leads"].forEach(function (t) { $("#tab" + t[0].toUpperCase() + t.slice(1)).hidden = t !== tab; });
     if (tab === "musicas") API.admin.songs($("#adminBusca").value).then(function (list) { $("#adminMusicas").innerHTML = "<tr><th>quando</th><th>nome</th><th>WhatsApp</th><th>ritmo</th><th>status</th><th>faixas</th><th>pago</th><th></th></tr>" + list.map(function (s) { return "<tr><td>" + new Date(s.created_at).toLocaleString("pt-BR") + "</td><td>" + esc(s.nome) + "<br><small>" + s.id + "</small></td><td>" + esc(s.whatsapp || "—") + "</td><td>" + esc(s.ritmoNome) + "</td><td>" + esc(s.status) + "</td><td>" + s.tracks + "</td><td>" + (s.paid ? s.plan : "não") + "</td><td><a class='btn btn-ghost' href='#/previa/" + s.id + "'>ouvir</a> " + (s.status === "FAILED" ? "<button class='btn btn-ghost' data-retry='" + s.id + "'>refazer</button>" : "") + (!s.paid ? "<button class='btn btn-ghost' data-unlock='" + s.id + "'>liberar</button>" : "") + "</td></tr>"; }).join(""); bindAdminActions($("#adminMusicas")); });
     if (tab === "pedidos") API.admin.orders().then(function (list) { $("#adminPedidos").innerHTML = "<tr><th>quando</th><th>música</th><th>WhatsApp</th><th>plano</th><th>extras</th><th>total</th><th>status</th></tr>" + list.map(function (o) { return "<tr><td>" + new Date(o.created_at).toLocaleString("pt-BR") + "</td><td>" + esc(o.nome) + "</td><td>" + esc(o.whatsapp) + "</td><td>" + esc(o.plan) + "</td><td>" + esc(JSON.parse(o.bumps || "[]").join(", ") || "—") + "</td><td>" + brl(o.total) + "</td><td>" + esc(o.status) + "</td></tr>"; }).join(""); });
     if (tab === "mural") API.admin.mural().then(function (list) { $("#adminMural").innerHTML = "<tr><th>música</th><th>WhatsApp</th><th>status</th><th>plays</th><th></th></tr>" + (list.map(function (s) { return "<tr><td>" + esc(s.titulo || s.nome) + "</td><td>" + esc(s.whatsapp || "—") + "</td><td>" + esc(s.public_status) + "</td><td>" + s.plays + "</td><td>" + (s.public_status === "pending" ? "<button class='btn btn-pix' data-mural='" + s.id + "' data-approve='1'>aprovar</button> " : "") + "<button class='btn btn-ghost' data-mural='" + s.id + "' data-approve='0'>tirar</button></td></tr>"; }).join("") || "<tr><td colspan='5' class='muted'>nada pendente</td></tr>"); bindAdminActions($("#adminMural")); });
+  }
+  function adminLeads() {
+    API.admin.leads().then(function (list) {
+      $("#adminLeads").innerHTML = "<tr><th>quando</th><th>e-mail</th><th>WhatsApp</th><th>nome</th><th>música</th><th>pagou</th></tr>" + (list.map(function (l) {
+        return "<tr><td>" + new Date(l.created_at).toLocaleString("pt-BR") + "</td><td>" + esc(l.email || "—") + "</td><td>" + esc(l.whatsapp || "—") + "</td><td>" + esc(l.nome || "") + "</td><td>" + esc(l.musica || "") + "</td><td>" + (l.paid ? "sim" : "não") + "</td></tr>";
+      }).join("") || "<tr><td colspan='6'>nenhum lead ainda</td></tr>");
+    });
   }
   function adminCupons() {
     API.admin.cupons().then(function (list) {
@@ -618,7 +651,7 @@
       .then(function (c) { toast("cupom " + c.code + (c.enviado ? " enviado no WhatsApp" : " gerado")); $("#cupomHandle").value = ""; $("#cupomWpp").value = ""; adminCupons(); })
       .catch(function (e) { toast(e.message); }).finally(function () { b.disabled = false; });
   });
-  $$("#adminNav button").forEach(function (b) { b.addEventListener("click", function () { adminTab(b.dataset.tab); if (b.dataset.tab === "cupons") adminCupons(); }); });
+  $$("#adminNav button").forEach(function (b) { b.addEventListener("click", function () { adminTab(b.dataset.tab); if (b.dataset.tab === "cupons") adminCupons(); if (b.dataset.tab === "leads") adminLeads(); }); });
   $("#adminBusca").addEventListener("input", function () { clearTimeout(this._t); this._t = setTimeout(function () { adminTab("musicas"); }, 300); });
 
   // ============================================================

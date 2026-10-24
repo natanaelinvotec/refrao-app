@@ -44,6 +44,14 @@ r.get("/songs", (req, res) => {
   res.json(list.map((s) => ({ ...s, tracks: JSON.parse(s.tracks || "[]").filter(Boolean).length, ritmoNome: (RITMOS[s.ritmo] || {}).nome })));
 });
 r.get("/orders", (req, res) => res.json(rows("SELECT o.*, s.nome FROM orders o JOIN songs s ON s.id = o.song_id ORDER BY o.created_at DESC LIMIT 100")));
+// leads (e-mail/WhatsApp de quem chegou ao PIX) + exportação CSV para o Instagram/Meta Ads, Mailchimp etc.
+r.get("/leads", (req, res) => res.json(rows("SELECT l.*, s.nome AS musica, s.ritmo FROM leads l LEFT JOIN songs s ON s.id = l.song_id ORDER BY l.created_at DESC LIMIT 500")));
+r.get("/leads.csv", (req, res) => {
+  const list = rows("SELECT l.email, l.whatsapp, l.nome, l.paid, l.source, l.created_at, s.nome AS musica, s.ritmo FROM leads l LEFT JOIN songs s ON s.id = l.song_id ORDER BY l.created_at DESC");
+  const q = (v) => '"' + String(v ?? "").replace(/"/g, '""') + '"';
+  const csv = ["email,whatsapp,nome,pagou,origem,quando,musica,ritmo", ...list.map((l) => [l.email, l.whatsapp, l.nome, l.paid ? "sim" : "nao", l.source, new Date(l.created_at).toISOString(), l.musica, l.ritmo].map(q).join(","))].join("\n");
+  res.setHeader("Content-Type", "text/csv; charset=utf-8"); res.setHeader("Content-Disposition", "attachment; filename=leads-refrao.csv"); res.end("\ufeff" + csv);
+});
 // cupons "siga e ganhe": lista e geração manual (ex.: a pessoa mandou print seguindo pelo WhatsApp)
 r.get("/cupons", (req, res) => res.json(cupons.listar()));
 r.post("/cupons", async (req, res) => {

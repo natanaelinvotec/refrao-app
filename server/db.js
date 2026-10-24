@@ -97,6 +97,19 @@ CREATE TABLE IF NOT EXISTS coupons (
   created_at INTEGER NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_coupons_handle ON coupons(source, handle);
+CREATE TABLE IF NOT EXISTS leads (   -- quem deixou e-mail/WhatsApp no checkout (vira lista de marketing)
+  id TEXT PRIMARY KEY,
+  email TEXT,
+  whatsapp TEXT,
+  nome TEXT,
+  song_id TEXT,
+  paid INTEGER DEFAULT 0,
+  source TEXT DEFAULT 'checkout',
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER
+);
+CREATE INDEX IF NOT EXISTS idx_leads_email ON leads(email);
+CREATE INDEX IF NOT EXISTS idx_leads_whatsapp ON leads(whatsapp);
 CREATE TABLE IF NOT EXISTS inbox_seen (   -- ids de mensagens já tratadas (Instagram/WhatsApp reenviam webhooks)
   id TEXT PRIMARY KEY,
   created_at INTEGER NOT NULL

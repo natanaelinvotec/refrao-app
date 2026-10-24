@@ -62,64 +62,31 @@
     </article>
   </div>
 
-  <!-- COMO FUNCIONA: o recibo -->
-  <section class="chapter chapter-slip" id="como">
+  <!-- COMO FUNCIONA: 3 passos -->
+  <section class="chapter chapter-como" id="como">
     <div class="chapter-text" data-reveal>
       <h2 data-part style="--i:0">Do recado ao play</h2>
       <p data-part style="--i:1">Você conta a história, lê a letra antes de gravar e ouve duas versões inteiras. Só paga se gostar. O clipe com as suas fotos sai junto com a música.</p>
     </div>
-    <div class="slip" data-reveal data-ui>
-      <h3>agora</h3>
-      <div class="slip-row"><span>pra quem é e o que precisa dizer</span><i></i><span>1 min</span></div>
-      <div class="slip-row"><span>escolhe o ritmo e a voz</span><i></i><span>30 s</span></div>
-      <div class="slip-row"><span>lê e aprova a letra</span><i></i><span>1 min</span></div>
-      <h3>em seguida</h3>
-      <div class="slip-row"><span>o estúdio grava duas versões</span><i></i><span>2 min</span></div>
-      <div class="slip-row"><span>você sobe as fotos do clipe</span><i></i><span>enquanto espera</span></div>
-      <h3>depois do PIX</h3>
-      <div class="slip-row"><span>MP3 sem marca d'água, 2 versões</span><i></i><span>na hora</span></div>
-      <div class="slip-row"><span>clipe com legenda da letra</span><i></i><span>na hora</span></div>
-      <div class="slip-row"><span>link com capa pra mandar no WhatsApp</span><i></i><span>na hora</span></div>
-      <div class="slip-total"><span>você sai com 2 músicas e 1 clipe</span><span>5 min</span></div>
-    </div>
-  </section>
-
-  <!-- VITRINE: o disco -->
-  <section class="chapter chapter-disc" id="versoes">
-    <div class="disc-plate" data-reveal>
-      <div class="disc" data-ui aria-label="prévia com duas versões">
-        <div class="disc-ring"></div><div class="disc-dot"></div>
-        <div class="disc-label"><span class="disc-label-name">Dona Cida</span><span class="disc-label-sub">forró · versão 1 · 2:48</span></div>
-      </div>
-    </div>
-    <div class="disc-text" data-reveal>
-      <div class="disc-tabs" id="discTabs" role="tablist">
-        <button type="button" role="tab" class="is-on" data-tab="pessoa">pra uma pessoa</button>
-        <button type="button" role="tab" data-tab="empresa">pro meu negócio</button>
-        <button type="button" role="tab" data-tab="candidato">pra campanha</button>
-      </div>
-      <div>
-        <h2 id="discTitle">Duas versões, você escolhe</h2>
-        <p id="discDesc">A mesma letra gravada de dois jeitos. Ouve as duas inteiras, com marca d'água, e leva a que mais gostar. Não gostou de nenhuma? Refazemos uma vez sem custo.</p>
-      </div>
-      <div class="disc-actions">
-        <a href="#/criar" class="cell cell-ink">criar a minha</a>
-        <a href="#mural" class="cell cell-tone">ouvir exemplos</a>
-      </div>
+    <div class="passos" data-reveal>
+      <div class="passo holo tilt" data-part style="--i:0"><span class="num">1</span><h3>Conta a história</h3><p>Pra quem é, o que precisa dizer e o ritmo. Dá pra escrever ou falar no microfone.</p></div>
+      <div class="passo holo tilt" data-part style="--i:1"><span class="num">2</span><h3>Aprova a letra</h3><p>Você lê a letra antes de gravar e muda o que quiser. Nome errado no refrão nunca mais.</p></div>
+      <div class="passo holo tilt" data-part style="--i:2"><span class="num">3</span><h3>Ouve, escolhe e compartilha</h3><p>Duas versões completas, clipe com as suas fotos e um link com capa pra mandar no WhatsApp, Instagram e TikTok.</p></div>
     </div>
   </section>
 
   <!-- MURAL: tiles com etiqueta -->
   <section class="chapter chapter-mural" id="mural">
-    <h2 data-reveal>Tocando no mural</h2>
+    <h2 data-reveal>Tocando agora no mural</h2>
+    <p class="lead" data-reveal>Músicas publicadas por quem fez. Toque no play pra ouvir o ritmo.</p>
     <div class="mural" id="muralLanding"></div>
   </section>
 
   <!-- PREÇO: o ingresso -->
   <section class="chapter chapter-ticket" id="precos">
     <h2 data-reveal>Preço de single, não de estúdio</h2>
+    <p class="lead" data-reveal>PIX com liberação na hora. A música é sua, com licença de uso comercial e eleitoral.</p>
     <div class="tickets" id="planosLanding"></div>
-    <p class="ticket-note">PIX com liberação na hora. A música é sua, com licença de uso comercial e eleitoral.</p>
     <div class="siga" id="sigaLanding" data-reveal>
       <div class="siga-main">
         <h3>Siga a gente e ganhe mais <span id="sigaPct">10%</span></h3>
@@ -274,7 +241,7 @@
     <p class="label">Leve junto</p>
     <div class="bumps" id="bumps"></div>
     <label class="field"><span>seu WhatsApp (a música chega aqui)</span><input id="inWpp" inputmode="tel" autocomplete="tel" placeholder="(85) 99999-9999"></label>
-    <label class="field"><span>e-mail (opcional, pro recibo)</span><input id="inEmail" type="email" autocomplete="email" placeholder="voce@email.com"></label>
+    <label class="field"><span id="emailLabel">seu e-mail (a música chega na sua caixa de entrada, com os arquivos)</span><input id="inEmail" type="email" autocomplete="email" inputmode="email" placeholder="voce@email.com"></label>
     <div class="cupom-box" id="cupomBox">
       <label class="field"><span>cupom (opcional)</span><div class="cupom-row"><input id="inCupom" placeholder="SIGA-XXXX" autocapitalize="characters" autocomplete="off"><button type="button" class="btn btn-ink" id="btnCupom">aplicar</button></div></label>
       <p class="tiny" id="cupomDica">Ganhe <span class="cupomPct">10%</span>: siga <a id="cupomIg" href="#" target="_blank" rel="noopener">@refrao.app</a> no Instagram e mande “CUPOM” no direct. O código chega na hora.</p>
@@ -303,9 +270,17 @@
     <h1 class="h1">A música é sua</h1>
     <p class="muted" id="musicaSub">As versões estão liberadas, sem marca d'água. O link também foi pro seu WhatsApp.</p>
     <div class="entregas" id="entregas"></div>
+    <div class="box email-box" id="emailBox">
+      <h3>Também mandamos pro seu e-mail</h3>
+      <p class="muted small" id="emailInfo">Os MP3 e os links vão para o e-mail do pedido.</p>
+      <div class="cupom-row"><input id="inEmail2" type="email" inputmode="email" placeholder="voce@email.com"><button type="button" class="btn btn-ink" id="btnEmail">enviar por e-mail</button></div>
+    </div>
     <div class="share-box">
-      <p class="label">Enviar o arquivo direto do seu celular</p>
+      <p class="label">Salvar no aparelho</p>
+      <p class="muted small">Toque em "Baixar" acima: o MP3 vai para a pasta de downloads do celular ou do computador.</p>
+      <p class="label">Compartilhar nas redes</p>
       <div class="share-row share-files" id="shareFiles" hidden></div>
+      <div class="share-row share-redes" id="shareRedes"></div>
       <p class="label">Manda o link pra quem é</p>
       <div class="share-row"><a class="btn btn-wpp" id="shareWpp" target="_blank" rel="noopener">WhatsApp</a><button type="button" class="btn btn-ghost" id="shareCopy">copiar link</button><button type="button" class="btn btn-ghost" id="shareNative">compartilhar</button></div>
     </div>
@@ -358,7 +333,7 @@
 <section class="view view-dash" data-view="admin">
   <aside class="dash-side">
     <p class="dash-user"><strong>Admin</strong><span class="muted small">operação</span></p>
-    <nav class="dash-nav" id="adminNav"><button type="button" data-tab="geral" class="is-on">visão geral</button><button type="button" data-tab="musicas">músicas</button><button type="button" data-tab="pedidos">pedidos</button><button type="button" data-tab="mural">mural</button><button type="button" data-tab="cupons">cupons</button></nav>
+    <nav class="dash-nav" id="adminNav"><button type="button" data-tab="geral" class="is-on">visão geral</button><button type="button" data-tab="musicas">músicas</button><button type="button" data-tab="pedidos">pedidos</button><button type="button" data-tab="mural">mural</button><button type="button" data-tab="cupons">cupons</button><button type="button" data-tab="leads">leads</button></nav>
   </aside>
   <div class="dash-main">
     <div class="login-box" id="adminLogin">
@@ -380,6 +355,10 @@
       <div id="tabMusicas" hidden><input class="field" id="adminBusca" placeholder="buscar por nome, WhatsApp ou id" style="margin:0 0 12px;padding:12px 14px;border-radius:12px;border:1.5px solid var(--linha);width:100%"><table class="tabela" id="adminMusicas"></table></div>
       <div id="tabPedidos" hidden><table class="tabela" id="adminPedidos"></table></div>
       <div id="tabMural" hidden><table class="tabela" id="adminMural"></table></div>
+      <div id="tabLeads" hidden>
+        <div class="dash-head"><p class="muted small">Quem deixou e-mail/WhatsApp no checkout. Exporte para o Meta Ads (público personalizado), Mailchimp ou planilha.</p><a class="btn btn-ink btn-sm" href="/api/admin/leads.csv" download>baixar CSV</a></div>
+        <table class="tabela" id="adminLeads"></table>
+      </div>
       <div id="tabCupons" hidden>
         <div class="cupom-novo">
           <p class="label">Liberar cupom na mão (quem mandou print seguindo a página)</p>

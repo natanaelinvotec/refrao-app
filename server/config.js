@@ -46,7 +46,14 @@ const config = {
     accountId: env("IG_ACCOUNT_ID"), accessToken: env("IG_ACCESS_TOKEN"), verifyToken: env("IG_VERIFY_TOKEN"),
     mock: MOCK || !env("IG_ACCESS_TOKEN")
   },
-  whatsappWebhookSecret: env("EVOLUTION_WEBHOOK_SECRET")
+  whatsappWebhookSecret: env("EVOLUTION_WEBHOOK_SECRET"),
+  // e-mail de entrega (lead): Resend ou Brevo via HTTPS; sem chave = mock. delivery: attach (links + MP3 anexos) | link | off
+  email: {
+    resendKey: env("RESEND_API_KEY"), brevoKey: env("BREVO_API_KEY"), from: env("EMAIL_FROM", "Refrão <musica@refrao.app>"),
+    delivery: ["attach", "link", "off"].includes(env("EMAIL_DELIVERY", "attach")) ? env("EMAIL_DELIVERY", "attach") : "attach",
+    required: env("EMAIL_REQUIRED", "1") === "1",
+    mock: MOCK || (!env("RESEND_API_KEY") && !env("BREVO_API_KEY"))
+  }
 };
 
 // Fora do modo mock, o servidor não sobe com segredos default/fracos (eles assinam sessão, admin e downloads).

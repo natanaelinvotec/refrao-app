@@ -187,6 +187,9 @@ r.post("/checkout", async (req, res) => {
   if (!song) return bad(res, 404, "música não encontrada");
   const whatsapp = normalizeWhatsapp(p.whatsapp);
   if (!whatsapp) return bad(res, 400, "coloque seu WhatsApp com DDD");
+  const email = String(p.email || "").trim().toLowerCase();
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return bad(res, 400, "esse e-mail não parece certo");
+  if (!email && config.email.required) return bad(res, 400, "coloque seu e-mail: a música vai pra sua caixa de entrada");
   const bumps = Array.isArray(p.bumps) ? p.bumps.filter((b) => BUMPS[b]) : [];
   let cupom = null, pct = 0;
   if (p.cupom) { const v = cupons.validar(p.cupom, p.plan); if (!v.ok) return bad(res, 400, v.erro); cupom = v.code; pct = v.pct; }
@@ -198,8 +201,12 @@ r.post("/checkout", async (req, res) => {
   try { charge = await pix.createCharge({ orderId, amount: total, description: `${config.brand} · ${PLANOS[p.plan].nome} · ${song.nome}`, customer: { phone: whatsapp, email: p.email || "", name: p.nome || song.nome } }); }
   catch (e) { console.error("[pix]", e.message); return bad(res, 502, "o PIX não respondeu agora, tente de novo"); }
   run("INSERT INTO orders (id, song_id, whatsapp, email, plan, bumps, total, provider, provider_id, pix_code, pix_qr_url, status, expires_at, created_at, cupom, desconto) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-    orderId, song.id, whatsapp, p.email || null, p.plan, JSON.stringify(bumps), total, config.pix.mock ? "mock" : "mercadopago", charge.providerId, charge.pixCode, charge.qrUrl, "PENDING", charge.expiresAt, now(), cupom, desconto);
+    orderId, song.id, whatsapp, email || null, p.plan, JSON.stringify(bumps), total, config.pix.mock ? "mock" : "mercadopago", charge.providerId, charge.pixCode, charge.qrUrl, "PENDING", charge.expiresAt, now(), cupom, desconto);
   run("UPDATE songs SET whatsapp = COALESCE(whatsapp, ?), updated_at = ? WHERE id = ?", whatsapp, now(), song.id);
+  // lead: quem chegou até o PIX (pagando ou não) entra na lista, uma linha por (contato, música)
+  const lead = row("SELECT id FROM leads WHERE song_id = ? AND (email = ? OR whatsapp = ?) LIMIT 1", song.id, email || "-", whatsapp);
+  if (lead) run("UPDATE leads SET email = COALESCE(?, email), whatsapp = ?, updated_at = ? WHERE id = ?", email || null, whatsapp, now(), lead.id);
+  else run("INSERT INTO leads (id, email, whatsapp, nome, song_id, paid, source, created_at) VALUES (?,?,?,?,?,?,?,?)", id(8), email || null, whatsapp, p.nome || song.nome, song.id, 0, "checkout", now());
   event("checkout", song.id, { orderId, plan: p.plan, bumps, total, cupom, desconto });
   res.json({ orderId, total, desconto, pixCode: charge.pixCode, qrUrl: charge.qrUrl, qrBase64: charge.qrBase64 || "", expiresAt: charge.expiresAt, mock: config.pix.mock });
 });
@@ -229,6 +236,17 @@ r.post("/webhooks/pix", async (req, res) => {
     if (p && p.paid && p.orderId) { const order = row("SELECT * FROM orders WHERE id = ?", p.orderId); if (order) await markPaid(order); }
     res.json({ ok: true });
   } catch (e) { bad(res, e.status || 500, e.status ? e.message : "erro ao confirmar"); }
+});
+// reenviar a entrega por e-mail (só o dono, só música paga); também serve para cadastrar o e-mail depois
+r.post("/songs/:id/email", mustOwn, async (req, res) => {
+  const song = req.song;
+  if (!song.paid) return bad(res, 403, "a música ainda não foi liberada");
+  const email = String(req.body?.email || "").trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return bad(res, 400, "esse e-mail não parece certo");
+  const lead = row("SELECT id FROM leads WHERE song_id = ? AND email = ? LIMIT 1", song.id, email);
+  if (!lead) run("INSERT INTO leads (id, email, whatsapp, nome, song_id, paid, source, created_at) VALUES (?,?,?,?,?,?,?,?)", id(8), email, song.whatsapp || null, song.nome, song.id, 1, "reenvio", now());
+  const r2 = await songs.enviarEmail(song, email);
+  res.json({ ok: !!r2, mock: !!(r2 && r2.mock) });
 });
 // ---------- Instagram: "siga e ganhe" (direct → cupom) ----------
 // A Meta valida a URL com GET (hub.challenge) e depois manda as mensagens por POST.

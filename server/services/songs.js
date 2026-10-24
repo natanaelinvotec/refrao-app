@@ -118,10 +118,30 @@ async function onPaid(order) {
   const link = `${config.baseUrl}/#/musica/${song.id}?t=${token}`;
   // Entrega: por padrão só o link (texto é a mensagem mais barata e mantém a pessoa na página, onde estão os botões de
   // baixar e compartilhar). WHATSAPP_DELIVERY=audio manda também o MP3; =off não manda nada.
+  // E-mail (lead): links assinados + MP3 em anexo quando cabe. Fica registrado em leads.paid.
+  if (order.email) {
+    run("UPDATE leads SET paid = 1, updated_at = ? WHERE email = ? AND song_id = ?", now(), order.email, song.id);
+    await enviarEmail(song, order.email, token).catch((e) => console.error("[email]", e.message));
+  }
   const modo = config.whatsapp.delivery;
   if (modo !== "off") await wa.sendText(order.whatsapp, `✅ Pagamento confirmado! A música de *${song.nome}* é sua.\nBaixe as versões completas${hasClip ? " e o clipe" : ""} e compartilhe aqui: ${link}`);
   const t0 = song.tracks[0];
   if (modo === "audio" && t0?.file) await wa.sendAudio(order.whatsapp, `${config.baseUrl}/api/songs/${song.id}/download?track=0&t=${token}`, song.titulo);
+}
+
+/** Manda a entrega (links + anexos) para um e-mail. Usado no pagamento e no botão "reenviar". */
+async function enviarEmail(song, email, token) {
+  if (config.email.delivery === "off") return null;
+  const path = require("path");
+  const email_ = require("./email");
+  const t = token || require("../util").sign({ dl: song.id }, 365 * 86400);
+  const links = song.tracks.map((tr, i) => tr && tr.file ? `${config.baseUrl}/api/songs/${song.id}/download?track=${i}&t=${t}` : null).filter(Boolean);
+  const arquivos = song.tracks.map((tr, i) => tr && tr.file ? { path: path.join(config.dataDir, "tracks", tr.file), filename: `${song.slug}-v${i + 1}.mp3` } : null).filter(Boolean);
+  const clip = row("SELECT * FROM clips WHERE song_id = ? AND status = 'DONE' ORDER BY created_at DESC LIMIT 1", song.id);
+  const clipe = clip ? `${config.baseUrl}/api/songs/${song.id}/clip?t=${t}` : null;
+  const r = await email_.enviarEntrega({ to: email, nome: song.nome, titulo: song.titulo, links, pagina: `${config.baseUrl}/m/${song.slug}`, clipe, arquivos });
+  event("email.entrega", song.id, { to: email, ok: !!r });
+  return r;
 }
 
 /** Renderiza um clipe na fila. */
@@ -188,4 +208,4 @@ function start() {
   console.log(`[worker] ativo (${config.suno.mock ? "mock" : "suno " + config.suno.baseUrl})`);
 }
 
-module.exports = { create, getSong, unpaidCount, onPaid, start, tick, ACTIVE };
+module.exports = { create, getSong, unpaidCount, onPaid, enviarEmail, start, tick, ACTIVE };
