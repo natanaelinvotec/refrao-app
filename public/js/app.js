@@ -498,7 +498,7 @@
       // "Enviar o arquivo": baixa o MP3/MP4 no aparelho e abre a folha de compartilhar do sistema (WhatsApp, Instagram,
       // Telegram...). Sai do próprio celular da pessoa — nada passa pelo WhatsApp do servidor, custo zero pra gente.
       var podeArquivo = !!(navigator.share && navigator.canShare);
-      var sf = $("#shareFiles"); sf.innerHTML = ""; sf.hidden = !podeArquivo;
+      var sf = $("#shareFiles"); sf.innerHTML = ""; sf.hidden = !podeArquivo; if (sf.previousElementSibling) sf.previousElementSibling.hidden = !podeArquivo;
       if (podeArquivo) {
         var alvos = [];
         s.tracks.forEach(function (t, i) { if (t) alvos.push({ rotulo: "enviar MP3 " + (s.tracks.length > 1 ? "v" + (i + 1) : ""), url: t.downloadUrl, nome: (s.slug || "musica") + (s.tracks.length > 1 ? "-v" + (i + 1) : "") + ".mp3", tipo: "audio/mpeg", dica: "WhatsApp, Telegram, e-mail" }); });
